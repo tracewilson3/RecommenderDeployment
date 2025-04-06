@@ -1,8 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model RecommenderDeployment.Models.RecommendationViewModel
+
+@{
+    ViewData["Title"] = "Article Recommendations";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Find Article Recommendations</h2>
+
+<form asp-action="Index" method="post">
+    <div>
+        <label for="articleId">Enter Article ID:</label>
+        <input type="text" id="articleId" name="articleId" value="@Model.ArticleId" required />
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+@if (!string.IsNullOrEmpty(Model.ArticleId))
+{
+    <hr />
+    <h3>Recommendations for Article ID: @Model.ArticleId</h3>
+
+    <div>
+        <h4>Collaborative Filtering Recommendations</h4>
+        @if (Model.CollaborativeRecommendations.Any())
+        {
+            <ul>
+                @foreach (var rec in Model.CollaborativeRecommendations)
+                {
+                    <li>@rec</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No collaborative recommendations found.</p>
+        }
+    </div>
+
+    <div>
+        <h4>Content Filtering Recommendations</h4>
+        @if (Model.ContentRecommendations.Any())
+        {
+            <ul>
+                @foreach (var rec in Model.ContentRecommendations)
+                {
+                    <li>@rec</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No content-based recommendations found.</p>
+        }
+    </div>
+}
